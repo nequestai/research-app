@@ -48,9 +48,6 @@ class MyApp(MDApp):
         self.web_feed = Image()
         return
 
-    def mediapipe(self):
-        print("Alex is cool")
-
 
 if __name__ == '__main__':
     MyApp().run()

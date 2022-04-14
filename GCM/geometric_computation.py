@@ -1,10 +1,3 @@
-"""
-Concrete MediaPipe module
-
-
-# Copyright (c) 2022-Current Alex Estrada <aestradab@ucdavis.edu>
-"""
-
 import matplotlib.pyplot as plt
 from Code.face_mesh_mediapipe import MediaPipe_Method
 import math
@@ -33,14 +26,14 @@ class Geometric_Computation(MediaPipe_Method):
         self.upper_splits = []
         self.lower_splits = []
 
-        self.pop_refs(self.refs)
+        self.pop_refs()
 
-    def pop_refs(self, refs):
+    def pop_refs(self):
         ref = []
         mid = []
         for i in self.dicts:
             mid_temp = []
-            ref.append([i.pop(refs[0]), i.pop(refs[1])])
+            ref.append([i.pop(self.refs[0]), i.pop(self.refs[1])])
             for mid_point in self.center:
                 mid_temp.append(i.pop(mid_point))
             mid.append(mid_temp)
@@ -51,8 +44,8 @@ class Geometric_Computation(MediaPipe_Method):
         self.normalize_dicts()
 
     def show_dicts(self):
-        for idx, dict in enumerate(self.dicts):
-            print("IMG", idx, "|", len(dict.items()), "Landmarks |", dict.items())
+        for idx, dic in enumerate(self.dicts):
+            print("IMG", idx, "|", len(dic.items()), "Landmarks |", dic.items())
 
     def factor_dicts(self):
         # getting refs distance

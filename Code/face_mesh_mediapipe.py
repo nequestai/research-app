@@ -1,10 +1,3 @@
-"""
-Concrete MediaPipe module
-
-
-# Copyright (c) 2022-Current Alex Estrada <aestradab@ucdavis.edu>
-"""
-
 import mediapipe as mp
 import cv2
 
@@ -51,14 +44,15 @@ class MediaPipe_Method:
         edited_mirrored_imgs = []
 
         for idx, img in enumerate(raw_imgs):
-            img_dict, edited_img = MediaPipe_Method.mp_process(self, img)
-            mirrored_dict, edited_mirrored_img = MediaPipe_Method.mp_process(self, mirrored_imgs[idx])
-            # appending dictionary list
-            img_dicts.append(img_dict)
-            mirrored_dicts.append(mirrored_dict)
-            # appending images
-            edited_imgs.append(edited_img)
-            edited_mirrored_imgs.append(edited_mirrored_img)
+            if hasattr(img, 'shape'):
+                img_dict, edited_img = self.mp_process(img)
+                mirrored_dict, edited_mirrored_img = self.mp_process(mirrored_imgs[idx])
+                # appending dictionary list
+                img_dicts.append(img_dict)
+                mirrored_dicts.append(mirrored_dict)
+                # appending images
+                edited_imgs.append(edited_img)
+                edited_mirrored_imgs.append(edited_mirrored_img)
 
         return img_dicts, mirrored_dicts, edited_imgs, edited_mirrored_imgs
 
@@ -69,7 +63,7 @@ class MediaPipe_Method:
         with mp_face_mesh.FaceMesh(
             static_image_mode=True,
             max_num_faces=1,
-            min_detection_confidence=0.5) as face_mesh:
+                min_detection_confidence=0.5) as face_mesh:
             height, width, val = img.shape
             edited_img = img.copy()
             # covert BGR to RGB before processing

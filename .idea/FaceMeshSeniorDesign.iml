@@ -8,7 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Script" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Kivy Logo Images" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 3.7 (NeuroVA-Senior-Design)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
