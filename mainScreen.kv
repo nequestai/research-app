@@ -26,25 +26,25 @@ MDScreen:
             spacing: 15
 
             FitImage:
-                source: '../Kivy Logo Images/FaceMeshMain.png'
+                source: './Kivy Logo Images/FaceMeshMain.png'
                 #allows_stretch: True
                 on_touch_down:
                     app.go_back_screen_once("ExamPage") if self.collide_point(*args[1].pos) else False
                 radius: [20,]
             FitImage:
-                source: '../Kivy Logo Images/U1_Instructions.png'
+                source: './Kivy Logo Images/U1_Instructions.png'
                 allows_stretch: True
                 on_touch_down:
                     app.go_back_screen_once("Instructions") if self.collide_point(*args[1].pos) else False
                 radius: [20,]
             FitImage:
-                source: '../Kivy Logo Images/Tile-Profile.png'
+                source: './Kivy Logo Images/Tile-Profile.png'
                 #allows_stretch: True
                 on_touch_down:
                     app.go_back_screen_once("UserProfile") if self.collide_point(*args[1].pos) else False
                 radius: [20,]
             FitImage:
-                source: '../Kivy Logo Images/Tile-Schedule.png'
+                source: './Kivy Logo Images/Tile-Schedule.png'
                 allows_stretch: True
                 on_touch_down:
                     app.go_back_screen_once("Schedule") if self.collide_point(*args[1].pos) else False
@@ -80,7 +80,7 @@ MDScreen:
                     text_color: (43/255, 87/255, 47/255, 1)
                 MDIconButton:
                     id: nav_icon3
-                    icon: '../Kivy Logo Images/Icon-Settings.png'
+                    icon: './Kivy Logo Images/Icon-Settings.png'
                     ripple_scale: 0
                     user_font_size: "35sp"
                     theme_text_color: "Custom"

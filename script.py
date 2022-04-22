@@ -19,7 +19,7 @@ name = 'Alex'
 expressions = ['Neutral', 'Smile', 'Wow', 'Frown']
 img_to_test = []
 for i in expressions:
-    path = '../Images/' + name + i + '.jpg'
+    path = './Images/' + name + i + '.jpg'
     img_to_test.append(cv2.imread(path))
 
 # refs

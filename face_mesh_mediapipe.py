@@ -69,7 +69,7 @@ class MediaPipe_Method:
                 all_landmarks_mirrored_plural.append(all_landmarks_mirrored)
 
         if save:
-            path = "../Data/" + name + ".csv"
+            path = r"./data/" + name + ".csv"
 
             dfs_temp = []
             dfs_temp2 = []
@@ -84,7 +84,7 @@ class MediaPipe_Method:
             result_df2 = pd.concat(dfs_temp2, axis=1)   # mirrored
             final_df = pd.concat([result_df, result_df2], axis=1)
 
-            final_df.to_csv(path)
+            final_df.to_csv(path, compression="gzip")
         return img_dicts, mirrored_dicts, edited_imgs, edited_mirrored_imgs
 
     def mp_process(self, img):

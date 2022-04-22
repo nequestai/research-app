@@ -6,7 +6,7 @@ Concrete MediaPipe module
 """
 
 import matplotlib.pyplot as plt
-from Code.face_mesh_mediapipe import MediaPipe_Method
+from face_mesh_mediapipe import MediaPipe_Method
 import math
 import numpy as np
 from icp import icp
