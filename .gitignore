@@ -1,3 +1,5 @@
 temp_images/*
 Images/*
 */__pycache__/*
+.idea/*
+Script/temp_images/*

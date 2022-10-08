@@ -38,7 +38,7 @@ Config.set('graphics', 'width', '750')
 Config.set('graphics', 'height', '1200')
 Config.write()
 
-Window.size = (90 * 7, 160 * 8)  # remove this for deployment
+Window.size = (90 * 5, 160 * 6)  # remove this for deployment
 
 resource_add_path('.')
 
@@ -110,7 +110,7 @@ class MPFaceMesh(Screen, Image, MDBoxLayout):
 
     def load_frame(self, id, root):
         self.root = root
-        self.capture = cv2.VideoCapture(0)
+        self.capture = cv2.VideoCapture(1)
         self.clock = Clock.schedule_interval(self.load_video, 1.0 / 30.0)
 
     def detect_face(self):
@@ -191,8 +191,8 @@ class MPFaceMesh(Screen, Image, MDBoxLayout):
             if start is not None and end is not None:
                 sx, sy = start
                 ex, ey = end
-                self.frame = frame[sy:ey, sx: ex]
 
+                self.frame = frame[sy-20:ey, sx:ex]
                 # Flip horizontal and convert image to texture
                 buffer = cv2.flip(self.frame, 0).tobytes()
                 texture = Texture.create(size=(self.frame.shape[1], self.frame.shape[0]), colorfmt='bgr')
@@ -279,13 +279,12 @@ class MPFaceMesh(Screen, Image, MDBoxLayout):
             print("NOT ALL EXPRESSIONS ARE BEING TESTED")
 
         # saving images to file
-        directory2 = r'./data/raw_images'
-        for idx, img in enumerate(post_images):
-            cv2.imwrite(directory2 + "/" + self.profile_id + str(idx) + '.jpg', img)
+        # directory2 = r'./data/raw_images'
+        # for idx, img in enumerate(post_images):
+        #     cv2.imwrite(directory2 + "/" + self.profile_id + str(idx) + '.jpg', img)
 
         # saving comments and date to csv
         directory3 = r'./data/patient_id_date_info.csv'
-        # file = pd.DataFrame({'ID': self.profile_id, 'Date': self.profile_date, 'Comments': self.profile_comments})
         with open(directory3, 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow([self.profile_id, self.profile_date, self.profile_comments])
@@ -311,17 +310,41 @@ class MPFaceMesh(Screen, Image, MDBoxLayout):
         original_mirrored_dist, all_avg, upper_lower_split_avg = patient.get_icp_distances(
             mirrored_patient.norm_array_dicts)
 
+        alternate_model_avg = []  # avg1, avg2, avg3, avg4
+        alternate_model_up_low = []  # up1, lo1, up1, lo1, up1, lo1, up1, lo1
         for idx, i in enumerate(original_mirrored_dist):
-            print("----------------------------------------ALTERNATE MODEL "
-                  "RESULTS-----------------------------------------")
+            print("-------------------------------------ALTERNATE MODEL RESULTS------------------------------------")
             print("IMG", idx + 1, ":")
             # print("All original-to-mirrored distances:", i)
+            alternate_model_avg.append(all_avg[idx] * 10000)
+            alternate_model_up_low.append(upper_lower_split_avg[idx][0] * 10000)
+            alternate_model_up_low.append(upper_lower_split_avg[idx][1] * 10000)
             print("Upper Asymmetry Score:", upper_lower_split_avg[idx][0] * 10000)
             print("Lower Asymmetry Score:", upper_lower_split_avg[idx][1] * 10000)
             print("Weighted Average:", all_avg[idx] * 10000)
 
-        # patient.GCM1()
-        patient.GCM2()
+        print(alternate_model_avg, alternate_model_up_low)
+
+        avg1_r_all, avg1_r_upper, avg1_r_lower, upper_dr, upper_dl, lower_dr, lower_dl = patient.GCM1()
+        avg2_r_all, avg2_r_upper, avg2_r_lower = patient.GCM2()
+
+        # organizing for CSV ------------------------------------------------------------------------------------------
+        dl_dr = [upper_dr[0], upper_dl[0], lower_dr[0], lower_dl[0],
+                 upper_dr[1], upper_dl[1], lower_dr[1], lower_dl[1],
+                 upper_dr[2], upper_dl[2], lower_dr[2], lower_dl[2]]
+        temp = [avg1_r_upper[0], avg1_r_lower[0], avg1_r_upper[1], avg1_r_lower[1], avg1_r_upper[2], avg1_r_lower[2]]
+        temp2 = [avg2_r_upper[0], avg2_r_lower[0], avg2_r_upper[1], avg2_r_lower[1], avg2_r_upper[2], avg2_r_lower[2]]
+        gcm1 = [self.profile_id] + dl_dr + [self.profile_id] + avg1_r_all + temp
+        gcm2 = [self.profile_id] + avg2_r_all + temp2
+        # final output for CSV
+        out = alternate_model_avg + alternate_model_up_low + gcm1 + gcm2
+        out2 = [self.profile_id] + [patient.max] + [patient.min] + [patient.max - patient.min]
+
+        # saving comments and date to csv -----------------------------------------------------------------------------
+        directory = r'./data/all_results_extra_landmarks_patients.csv'
+        with open(directory, 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(out)
 
     def refresh_test(self, root):
         root.ids["label1"].text = "START"
